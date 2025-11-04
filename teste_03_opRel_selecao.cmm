@@ -13,6 +13,9 @@ void main() {
     read( b );
     read( c );
 
+    a=b=c=1;
+    b=++a + ++b;
+
     write (" a =  ", a );
     write (" b =  ", b );
     write (" c =  ", c );
