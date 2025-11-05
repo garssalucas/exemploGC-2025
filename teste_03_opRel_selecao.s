@@ -23,17 +23,15 @@ _start:
 	CALL _read
 	POPL %EDX
 	MOVL %EAX, (%EDX)
-	PUSHL $5
-	POPL %EDX
 	PUSHL _a
-	PUSHL %EDX
+	PUSHL _a
+	PUSHL $1
 	POPL %EBX
 	POPL %EAX
 	ADDL %EBX, %EAX
 	PUSHL %EAX
 	POPL %EDX
 	MOVL %EDX, _a
-	PUSHL _a
 	POPL %EDX
 	MOVL $_str_1Len, %EDX
 	MOVL $_str_1, %ECX
