@@ -52,6 +52,7 @@ NL  = \n | \r | \r\n
 "\[" | 
 "\]"    { return (int) yycharat(0); }
 
+"+="   { return Parser.MAISIGUAL; }
 "++"    { return Parser.MAISMAIS; }
 
 {NUM}  { yyparser.yylval = new ParserVal(yytext()); 

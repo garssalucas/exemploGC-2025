@@ -10,9 +10,9 @@
 %token WHILE,TRUE, FALSE, IF, ELSE
 %token EQ, LEQ, GEQ, NEQ 
 %token AND, OR
-%token MAISMAIS
+%token MAISMAIS, MAISIGUAL
 
-%right '='
+%right '=' MAISIGUAL
 %left OR
 %left AND
 %left  '>' '<' EQ LEQ GEQ NEQ
@@ -21,6 +21,7 @@
 %left '!' 
 
 %nonassoc MAISMAIS
+%nonassoc MAISIGUAL
 
 %type <sval> ID
 %type <sval> LIT
@@ -165,6 +166,15 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
   						   System.out.println("\tMOVL %EDX, _"+$1);
 						   System.out.println("\tPUSHL %EDX");
 					     }
+
+		| ID MAISIGUAL exp { System.out.println("\tPOPL %EDX");
+					   System.out.println("\tPUSHL _"+$1);
+					   System.out.println("\tPUSHL %EDX");
+					   gcExpArit('+');
+					   System.out.println("\tPOPL %EDX");
+					   System.out.println("\tMOVL %EDX, _"+$1);
+					   System.out.println("\tPUSHL _"+$1);
+				 }
 
 		|MAISMAIS ID {System.out.println("\tPUSHL _"+$2);
 		System.out.println("\tPUSHL $1");
