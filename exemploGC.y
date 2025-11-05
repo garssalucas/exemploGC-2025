@@ -185,11 +185,11 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 		}
 		| ID MAISMAIS {
 			System.out.println("\tPUSHL _"+$1);           
-			System.out.println("\tPUSHL _"+$1);           
 			System.out.println("\tPUSHL $1");
 			gcExpArit('+');
 			System.out.println("\tPOPL %EDX");
-			System.out.println("\tMOVL %EDX, _"+$1);     
+			System.out.println("\tMOVL %EDX, _"+$1);
+			System.out.println("\tPUSHL _"+$1);                
 		}
 		;				
 

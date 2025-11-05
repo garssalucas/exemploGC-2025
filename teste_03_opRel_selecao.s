@@ -24,7 +24,6 @@ _start:
 	POPL %EDX
 	MOVL %EAX, (%EDX)
 	PUSHL _a
-	PUSHL _a
 	PUSHL $1
 	POPL %EBX
 	POPL %EAX
@@ -32,6 +31,7 @@ _start:
 	PUSHL %EAX
 	POPL %EDX
 	MOVL %EDX, _a
+	PUSHL _a
 	POPL %EDX
 	MOVL $_str_1Len, %EDX
 	MOVL $_str_1, %ECX
