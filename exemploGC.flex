@@ -34,6 +34,8 @@ NL  = \n | \r | \r\n
 
 /* operadores */
 
+"--"    { return Parser.MENOSMENOS; }
+
 "+" |
 "-" |
 "*" | 
@@ -54,6 +56,7 @@ NL  = \n | \r | \r\n
 
 "+="   { return Parser.MAISIGUAL; }
 "++"    { return Parser.MAISMAIS; }
+
 
 {NUM}  { yyparser.yylval = new ParserVal(yytext()); 
          return Parser.NUM; }
