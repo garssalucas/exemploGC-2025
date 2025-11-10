@@ -23,7 +23,36 @@ _start:
 	CALL _read
 	POPL %EDX
 	MOVL %EAX, (%EDX)
+	PUSHL _a
+	POPL %EDX
+	MOVL %EDX, _b
+	PUSHL %EDX
+	POPL %EDX
 rot_01:
+	PUSHL _b
+	PUSHL $10
+	POPL %EAX
+	POPL %EDX
+	CMPL %EAX, %EDX
+	MOVL $0, %EAX
+	SETL  %AL
+	PUSHL %EAX
+	POPL %EAX
+	CMPL $0, %EAX
+	JE rot_02
+	JNE rot_03
+rot_04:
+	PUSHL _b
+	PUSHL $1
+	POPL %EBX
+	POPL %EAX
+	ADDL %EBX, %EAX
+	PUSHL %EAX
+	POPL %EDX
+	MOVL %EDX, _b
+	PUSHL _b
+	JMP rot_01
+rot_03:
 	MOVL $_str_1Len, %EDX
 	MOVL $_str_1, %ECX
 	CALL _writeLit
@@ -31,28 +60,18 @@ rot_01:
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	PUSHL _b
+	JMP rot_04
+rot_02:
+	PUSHL _c
 	PUSHL $1
 	POPL %EBX
 	POPL %EAX
 	SUBL %EBX, %EAX
 	PUSHL %EAX
 	POPL %EDX
-	MOVL %EDX, _b
-	PUSHL _b
+	MOVL %EDX, _c
+	PUSHL _c
 	POPL %EDX
-		# terminou o bloco...
-	PUSHL _b
-	PUSHL $0
-	POPL %EAX
-	POPL %EDX
-	CMPL %EAX, %EDX
-	MOVL $0, %EAX
-	SETG  %AL
-	PUSHL %EAX
-	POPL %EAX   # do...while cond
-	CMPL $0, %EAX
-	JNE rot_01   # volta se verdadeiro
 	MOVL $_str_2Len, %EDX
 	MOVL $_str_2, %ECX
 	CALL _writeLit
@@ -138,7 +157,7 @@ rot_01:
 	PUSHL _ok
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_02
+	JE rot_05
 	MOVL $_str_8Len, %EDX
 	MOVL $_str_8, %ECX
 	CALL _writeLit
@@ -146,8 +165,8 @@ rot_01:
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	JMP rot_03
-rot_02:
+	JMP rot_06
+rot_05:
 	MOVL $_str_9Len, %EDX
 	MOVL $_str_9, %ECX
 	CALL _writeLit
@@ -155,7 +174,7 @@ rot_02:
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-rot_03:
+rot_06:
 	PUSHL _a
 	PUSHL $0
 	POPL %EAX
@@ -166,29 +185,29 @@ rot_03:
 	PUSHL %EAX
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_04
+	JE rot_07
 	MOVL $_str_10Len, %EDX
 	MOVL $_str_10, %ECX
 	CALL _writeLit
 	CALL _writeln
-	JMP rot_05
-rot_04:
+	JMP rot_08
+rot_07:
 	MOVL $_str_11Len, %EDX
 	MOVL $_str_11, %ECX
 	CALL _writeLit
 	CALL _writeln
-rot_05:
+rot_08:
 	PUSHL _ok
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_06
+	JE rot_09
 	PUSHL _a
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-	JMP rot_07
-rot_06:
+	JMP rot_10
+rot_09:
 	PUSHL _b
 	PUSHL _c
 	POPL %EAX
@@ -199,21 +218,21 @@ rot_06:
 	PUSHL %EAX
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_08
+	JE rot_11
 	PUSHL _b
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-	JMP rot_09
-rot_08:
+	JMP rot_12
+rot_11:
 	PUSHL _c
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-rot_09:
-rot_07:
+rot_12:
+rot_10:
 	MOVL $_str_12Len, %EDX
 	MOVL $_str_12, %ECX
 	CALL _writeLit

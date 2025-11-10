@@ -13,12 +13,10 @@ void main() {
     read( b );
     read( c );
     
-    do {
-      write (" b =  ", b );
-      b--;
-    } while (b > 0);
+    for (b = a; b < 10; b++)
+    write (" b =  ", b );
     
-
+    --c;
     write (" a =  ", a );
     write (" b =  ", b );
     write (" c =  ", c );

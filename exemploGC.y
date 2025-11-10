@@ -7,7 +7,7 @@
  
 
 %token ID, INT, FLOAT, BOOL, NUM, LIT, VOID, MAIN, READ, WRITE, IF, ELSE
-%token DO, WHILE,TRUE, FALSE, IF, ELSE
+%token DO, WHILE,TRUE, FALSE, IF, ELSE, FOR
 %token EQ, LEQ, GEQ, NEQ 
 %token AND, OR
 %token MAISMAIS, MENOSMENOS, MAISIGUAL
@@ -22,7 +22,6 @@
 %left '!' 
 
 %nonassoc MAISMAIS
-%nonassoc MAISIGUAL
 %nonassoc MENOSMENOS
 
 %type <sval> ID
@@ -131,7 +130,31 @@ cmd :  exp	';' { System.out.println("\tPOPL %EDX"); }
 			System.out.println("\tCMPL $0, %EAX");
 			System.out.printf("\tJNE rot_%02d   # volta se verdadeiro\n", pRot.peek());
 			pRot.pop();
-		  } 									
+		  }
+
+		| FOR '(' exp ';' {
+				          System.out.println("\tPOPL %EDX");
+						  pRot.push(proxRot);
+				          proxRot += 4;
+						  System.out.printf("rot_%02d:\n", pRot.peek());  
+			              }
+			      exp ';' {
+				          System.out.println("\tPOPL %EAX");
+						  System.out.println("\tCMPL $0, %EAX");
+						  System.out.printf("\tJE rot_%02d\n", pRot.peek()+1);  
+						  System.out.printf("\tJNE rot_%02d\n", pRot.peek()+2);
+						  System.out.printf("rot_%02d:\n", pRot.peek()+3);
+			              }
+				  exp ')' {
+						  System.out.printf("\tJMP rot_%02d\n", pRot.peek());
+						  System.out.printf("rot_%02d:\n", pRot.peek()+2);
+			              }
+			cmd   
+			{
+				System.out.printf("\tJMP rot_%02d\n", pRot.peek()+3);
+				System.out.printf("rot_%02d:\n", pRot.peek()+1);
+				pRot.pop();
+			}   									
     ;
      
      

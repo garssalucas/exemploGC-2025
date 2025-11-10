@@ -34,7 +34,7 @@ NL  = \n | \r | \r\n
 
 /* operadores */
 
-"--"    { return Parser.MENOSMENOS; }
+
 
 "+" |
 "-" |
@@ -58,6 +58,7 @@ NL  = \n | \r | \r\n
 
 "+="   { return Parser.MAISIGUAL; }
 "++"    { return Parser.MAISMAIS; }
+"--"    { return Parser.MENOSMENOS; }
 
 
 
@@ -83,6 +84,7 @@ do   { return Parser.DO; }
 while   { return Parser.WHILE; }
 if   { return Parser.IF; }
 else   { return Parser.ELSE; }
+for    { return Parser.FOR; }
 true   { return Parser.TRUE; }
 false   { return Parser.FALSE; }
 
