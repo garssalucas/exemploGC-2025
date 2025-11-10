@@ -60,6 +60,7 @@ NL  = \n | \r | \r\n
 "++"    { return Parser.MAISMAIS; }
 
 
+
 {NUM}  { yyparser.yylval = new ParserVal(yytext()); 
          return Parser.NUM; }
 
@@ -78,6 +79,7 @@ void   { return Parser.VOID; }
 main   { return Parser.MAIN; }
 write   { return Parser.WRITE; }
 read   { return Parser.READ; }
+do   { return Parser.DO; }
 while   { return Parser.WHILE; }
 if   { return Parser.IF; }
 else   { return Parser.ELSE; }

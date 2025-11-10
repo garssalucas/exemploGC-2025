@@ -23,46 +23,52 @@ _start:
 	CALL _read
 	POPL %EDX
 	MOVL %EAX, (%EDX)
-	PUSHL _a
+rot_01:
+	MOVL $_str_1Len, %EDX
+	MOVL $_str_1, %ECX
+	CALL _writeLit
 	PUSHL _b
+	POPL %EAX
+	CALL _write
+	CALL _writeln
+	PUSHL _b
+	PUSHL $1
+	POPL %EBX
+	POPL %EAX
+	SUBL %EBX, %EAX
+	PUSHL %EAX
+	POPL %EDX
+	MOVL %EDX, _b
+	PUSHL _b
+	POPL %EDX
+		# terminou o bloco...
+	PUSHL _b
+	PUSHL $0
 	POPL %EAX
 	POPL %EDX
 	CMPL %EAX, %EDX
 	MOVL $0, %EAX
-	SETE  %AL
+	SETG  %AL
 	PUSHL %EAX
-	PUSHL _a
-	PUSHL _b
-	POPL %EAX   # exp3 (falso)
-	POPL %EBX   # exp2 (verdadeiro)
-	POPL %EDX   # cond
-	CMPL $0, %EDX
-	JE  rot_01
-	PUSHL %EBX
-	JMP rot_02
-rot_01:
-	PUSHL %EAX
-rot_02:
-	POPL %EDX
-	MOVL %EDX, _c
-	PUSHL %EDX
-	POPL %EDX
-	MOVL $_str_1Len, %EDX
-	MOVL $_str_1, %ECX
-	CALL _writeLit
-	PUSHL _a
-	POPL %EAX
-	CALL _write
-	CALL _writeln
+	POPL %EAX   # do...while cond
+	CMPL $0, %EAX
+	JNE rot_01   # volta se verdadeiro
 	MOVL $_str_2Len, %EDX
 	MOVL $_str_2, %ECX
 	CALL _writeLit
-	PUSHL _b
+	PUSHL _a
 	POPL %EAX
 	CALL _write
 	CALL _writeln
 	MOVL $_str_3Len, %EDX
 	MOVL $_str_3, %ECX
+	CALL _writeLit
+	PUSHL _b
+	POPL %EAX
+	CALL _write
+	CALL _writeln
+	MOVL $_str_4Len, %EDX
+	MOVL $_str_4, %ECX
 	CALL _writeLit
 	PUSHL _c
 	POPL %EAX
@@ -108,22 +114,22 @@ rot_02:
 	MOVL %EDX, _ok
 	PUSHL %EDX
 	POPL %EDX
-	MOVL $_str_4Len, %EDX
-	MOVL $_str_4, %ECX
+	MOVL $_str_5Len, %EDX
+	MOVL $_str_5, %ECX
 	CALL _writeLit
 	PUSHL _p1
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	MOVL $_str_5Len, %EDX
-	MOVL $_str_5, %ECX
+	MOVL $_str_6Len, %EDX
+	MOVL $_str_6, %ECX
 	CALL _writeLit
 	PUSHL _p2
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	MOVL $_str_6Len, %EDX
-	MOVL $_str_6, %ECX
+	MOVL $_str_7Len, %EDX
+	MOVL $_str_7, %ECX
 	CALL _writeLit
 	PUSHL _ok
 	POPL %EAX
@@ -132,16 +138,7 @@ rot_02:
 	PUSHL _ok
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_03
-	MOVL $_str_7Len, %EDX
-	MOVL $_str_7, %ECX
-	CALL _writeLit
-	PUSHL _ok
-	POPL %EAX
-	CALL _write
-	CALL _writeln
-	JMP rot_04
-rot_03:
+	JE rot_02
 	MOVL $_str_8Len, %EDX
 	MOVL $_str_8, %ECX
 	CALL _writeLit
@@ -149,7 +146,16 @@ rot_03:
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-rot_04:
+	JMP rot_03
+rot_02:
+	MOVL $_str_9Len, %EDX
+	MOVL $_str_9, %ECX
+	CALL _writeLit
+	PUSHL _ok
+	POPL %EAX
+	CALL _write
+	CALL _writeln
+rot_03:
 	PUSHL _a
 	PUSHL $0
 	POPL %EAX
@@ -160,29 +166,29 @@ rot_04:
 	PUSHL %EAX
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_05
-	MOVL $_str_9Len, %EDX
-	MOVL $_str_9, %ECX
-	CALL _writeLit
-	CALL _writeln
-	JMP rot_06
-rot_05:
+	JE rot_04
 	MOVL $_str_10Len, %EDX
 	MOVL $_str_10, %ECX
 	CALL _writeLit
 	CALL _writeln
-rot_06:
+	JMP rot_05
+rot_04:
+	MOVL $_str_11Len, %EDX
+	MOVL $_str_11, %ECX
+	CALL _writeLit
+	CALL _writeln
+rot_05:
 	PUSHL _ok
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_07
+	JE rot_06
 	PUSHL _a
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-	JMP rot_08
-rot_07:
+	JMP rot_07
+rot_06:
 	PUSHL _b
 	PUSHL _c
 	POPL %EAX
@@ -193,23 +199,23 @@ rot_07:
 	PUSHL %EAX
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_09
+	JE rot_08
 	PUSHL _b
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-	JMP rot_10
-rot_09:
+	JMP rot_09
+rot_08:
 	PUSHL _c
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-rot_10:
-rot_08:
-	MOVL $_str_11Len, %EDX
-	MOVL $_str_11, %ECX
+rot_09:
+rot_07:
+	MOVL $_str_12Len, %EDX
+	MOVL $_str_12, %ECX
 	CALL _writeLit
 	PUSHL _maior
 	POPL %EAX
@@ -328,35 +334,38 @@ _str_0:
 	 .ascii "Informe 3 numeros: "
 _str_0Len = . - _str_0
 _str_1:
-	 .ascii " a =  "
+	 .ascii " b =  "
 _str_1Len = . - _str_1
 _str_2:
-	 .ascii " b =  "
+	 .ascii " a =  "
 _str_2Len = . - _str_2
 _str_3:
-	 .ascii " c =  "
+	 .ascii " b =  "
 _str_3Len = . - _str_3
 _str_4:
-	 .ascii " p1 =  "
+	 .ascii " c =  "
 _str_4Len = . - _str_4
 _str_5:
-	 .ascii " p2 =  "
+	 .ascii " p1 =  "
 _str_5Len = . - _str_5
 _str_6:
-	 .ascii " ok =  "
+	 .ascii " p2 =  "
 _str_6Len = . - _str_6
 _str_7:
 	 .ascii " ok =  "
 _str_7Len = . - _str_7
 _str_8:
-	 .ascii " nao ok =  "
+	 .ascii " ok =  "
 _str_8Len = . - _str_8
 _str_9:
-	 .ascii "a eh um numero positivo"
+	 .ascii " nao ok =  "
 _str_9Len = . - _str_9
 _str_10:
-	 .ascii "a NAO eh um numero positivo"
+	 .ascii "a eh um numero positivo"
 _str_10Len = . - _str_10
 _str_11:
-	 .ascii "maior dos tres valores: "
+	 .ascii "a NAO eh um numero positivo"
 _str_11Len = . - _str_11
+_str_12:
+	 .ascii "maior dos tres valores: "
+_str_12Len = . - _str_12

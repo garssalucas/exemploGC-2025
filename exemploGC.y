@@ -7,7 +7,7 @@
  
 
 %token ID, INT, FLOAT, BOOL, NUM, LIT, VOID, MAIN, READ, WRITE, IF, ELSE
-%token WHILE,TRUE, FALSE, IF, ELSE
+%token DO, WHILE,TRUE, FALSE, IF, ELSE
 %token EQ, LEQ, GEQ, NEQ 
 %token AND, OR
 %token MAISMAIS, MENOSMENOS, MAISIGUAL
@@ -120,7 +120,19 @@ cmd :  exp	';' { System.out.println("\tPOPL %EDX"); }
 											System.out.printf("rot_%02d:\n",pRot.peek()+1);
 											pRot.pop();
 										}
-     ;
+	    | DO {
+          pRot.push(proxRot); 
+          proxRot += 1;
+          System.out.printf("rot_%02d:\n", pRot.peek());
+		  }
+		  cmd
+		  WHILE '(' exp ')' ';'{
+			System.out.println("\tPOPL %EAX   # do...while cond");
+			System.out.println("\tCMPL $0, %EAX");
+			System.out.printf("\tJNE rot_%02d   # volta se verdadeiro\n", pRot.peek());
+			pRot.pop();
+		  } 									
+    ;
      
      
 restoIf : ELSE  {
