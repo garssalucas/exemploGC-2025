@@ -13,10 +13,7 @@ void main() {
     read( b );
     read( c );
 
-    --a;
-    b--;
-    c=a=b;
-    c = c--;
+    c = (a == b) ? a : b;
 
     write (" a =  ", a );
     write (" b =  ", b );

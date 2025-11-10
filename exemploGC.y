@@ -13,6 +13,7 @@
 %token MAISMAIS, MENOSMENOS, MAISIGUAL
 
 %right '=' MAISIGUAL
+%right '?' ':'
 %left OR
 %left AND
 %left  '>' '<' EQ LEQ GEQ NEQ
@@ -206,6 +207,19 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 			System.out.println("\tPOPL %EDX");
 			System.out.println("\tMOVL %EDX, _"+$1);
 			System.out.println("\tPUSHL _"+$1);                
+		}
+		| exp '?' exp ':' exp{
+			int r = proxRot; proxRot += 2;
+			System.out.println("\tPOPL %EAX   # exp3 (falso)");
+			System.out.println("\tPOPL %EBX   # exp2 (verdadeiro)");
+			System.out.println("\tPOPL %EDX   # cond");
+			System.out.println("\tCMPL $0, %EDX");
+			System.out.printf("\tJE  rot_%02d\n", r); 
+			System.out.println("\tPUSHL %EBX");        
+			System.out.printf("\tJMP rot_%02d\n", r+1);
+			System.out.printf("rot_%02d:\n", r);
+			System.out.println("\tPUSHL %EAX");        
+			System.out.printf("rot_%02d:\n", r+1);
 		}
 		;				
 
