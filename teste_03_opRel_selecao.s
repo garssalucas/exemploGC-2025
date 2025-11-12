@@ -23,25 +23,18 @@ _start:
 	CALL _read
 	POPL %EDX
 	MOVL %EAX, (%EDX)
-	PUSHL _a
-	POPL %EDX
-	MOVL %EDX, _b
-	PUSHL %EDX
-	POPL %EDX
 rot_01:
 	PUSHL _b
-	PUSHL $10
+	PUSHL $20
 	POPL %EAX
 	POPL %EDX
 	CMPL %EAX, %EDX
 	MOVL $0, %EAX
 	SETL  %AL
 	PUSHL %EAX
-	POPL %EAX
+	POPL %EAX   # desvia se falso...
 	CMPL $0, %EAX
 	JE rot_02
-	JNE rot_03
-rot_04:
 	PUSHL _b
 	PUSHL $1
 	POPL %EBX
@@ -51,8 +44,22 @@ rot_04:
 	POPL %EDX
 	MOVL %EDX, _b
 	PUSHL _b
+	POPL %EDX
+	PUSHL _b
+	PUSHL $7
+	POPL %EAX
+	POPL %EDX
+	CMPL %EAX, %EDX
+	MOVL $0, %EAX
+	SETE  %AL
+	PUSHL %EAX
+	POPL %EAX
+	CMPL $0, %EAX
+	JE rot_03
 	JMP rot_01
+	JMP rot_04
 rot_03:
+rot_04:
 	MOVL $_str_1Len, %EDX
 	MOVL $_str_1, %ECX
 	CALL _writeLit
@@ -60,8 +67,72 @@ rot_03:
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	JMP rot_04
+		# terminou o bloco...
+	JMP rot_01   # terminou cmd na linha de cima
 rot_02:
+	MOVL $_str_2Len, %EDX
+	MOVL $_str_2, %ECX
+	CALL _writeLit
+	CALL _writeln
+	PUSHL _a
+	POPL %EDX
+	MOVL %EDX, _b
+	PUSHL %EDX
+	POPL %EDX
+rot_08:
+	PUSHL _b
+	PUSHL $20
+	POPL %EAX
+	POPL %EDX
+	CMPL %EAX, %EDX
+	MOVL $0, %EAX
+	SETL  %AL
+	PUSHL %EAX
+	POPL %EAX
+	CMPL $0, %EAX
+	JE rot_06
+	JNE rot_07
+rot_05:
+	PUSHL _b
+	PUSHL $1
+	POPL %EBX
+	POPL %EAX
+	ADDL %EBX, %EAX
+	PUSHL %EAX
+	POPL %EDX
+	MOVL %EDX, _b
+	PUSHL _b
+	JMP rot_08
+rot_07:
+	PUSHL _b
+	PUSHL $7
+	POPL %EAX
+	POPL %EDX
+	CMPL %EAX, %EDX
+	MOVL $0, %EAX
+	SETE  %AL
+	PUSHL %EAX
+	POPL %EAX
+	CMPL $0, %EAX
+	JE rot_09
+	JMP rot_05
+	JMP rot_10
+rot_09:
+rot_10:
+	MOVL $_str_3Len, %EDX
+	MOVL $_str_3, %ECX
+	CALL _writeLit
+	PUSHL _b
+	POPL %EAX
+	CALL _write
+	CALL _writeln
+		# terminou o bloco...
+	JMP rot_05
+rot_06:
+	MOVL $_str_4Len, %EDX
+	MOVL $_str_4, %ECX
+	CALL _writeLit
+	CALL _writeln
 	PUSHL _c
 	PUSHL $1
 	POPL %EBX
@@ -72,22 +143,22 @@ rot_02:
 	MOVL %EDX, _c
 	PUSHL _c
 	POPL %EDX
-	MOVL $_str_2Len, %EDX
-	MOVL $_str_2, %ECX
+	MOVL $_str_5Len, %EDX
+	MOVL $_str_5, %ECX
 	CALL _writeLit
 	PUSHL _a
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	MOVL $_str_3Len, %EDX
-	MOVL $_str_3, %ECX
+	MOVL $_str_6Len, %EDX
+	MOVL $_str_6, %ECX
 	CALL _writeLit
 	PUSHL _b
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	MOVL $_str_4Len, %EDX
-	MOVL $_str_4, %ECX
+	MOVL $_str_7Len, %EDX
+	MOVL $_str_7, %ECX
 	CALL _writeLit
 	PUSHL _c
 	POPL %EAX
@@ -133,22 +204,22 @@ rot_02:
 	MOVL %EDX, _ok
 	PUSHL %EDX
 	POPL %EDX
-	MOVL $_str_5Len, %EDX
-	MOVL $_str_5, %ECX
+	MOVL $_str_8Len, %EDX
+	MOVL $_str_8, %ECX
 	CALL _writeLit
 	PUSHL _p1
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	MOVL $_str_6Len, %EDX
-	MOVL $_str_6, %ECX
+	MOVL $_str_9Len, %EDX
+	MOVL $_str_9, %ECX
 	CALL _writeLit
 	PUSHL _p2
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	MOVL $_str_7Len, %EDX
-	MOVL $_str_7, %ECX
+	MOVL $_str_10Len, %EDX
+	MOVL $_str_10, %ECX
 	CALL _writeLit
 	PUSHL _ok
 	POPL %EAX
@@ -157,24 +228,24 @@ rot_02:
 	PUSHL _ok
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_05
-	MOVL $_str_8Len, %EDX
-	MOVL $_str_8, %ECX
+	JE rot_11
+	MOVL $_str_11Len, %EDX
+	MOVL $_str_11, %ECX
 	CALL _writeLit
 	PUSHL _ok
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	JMP rot_06
-rot_05:
-	MOVL $_str_9Len, %EDX
-	MOVL $_str_9, %ECX
+	JMP rot_12
+rot_11:
+	MOVL $_str_12Len, %EDX
+	MOVL $_str_12, %ECX
 	CALL _writeLit
 	PUSHL _ok
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-rot_06:
+rot_12:
 	PUSHL _a
 	PUSHL $0
 	POPL %EAX
@@ -185,29 +256,29 @@ rot_06:
 	PUSHL %EAX
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_07
-	MOVL $_str_10Len, %EDX
-	MOVL $_str_10, %ECX
+	JE rot_13
+	MOVL $_str_13Len, %EDX
+	MOVL $_str_13, %ECX
 	CALL _writeLit
 	CALL _writeln
-	JMP rot_08
-rot_07:
-	MOVL $_str_11Len, %EDX
-	MOVL $_str_11, %ECX
+	JMP rot_14
+rot_13:
+	MOVL $_str_14Len, %EDX
+	MOVL $_str_14, %ECX
 	CALL _writeLit
 	CALL _writeln
-rot_08:
+rot_14:
 	PUSHL _ok
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_09
+	JE rot_15
 	PUSHL _a
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-	JMP rot_10
-rot_09:
+	JMP rot_16
+rot_15:
 	PUSHL _b
 	PUSHL _c
 	POPL %EAX
@@ -218,23 +289,23 @@ rot_09:
 	PUSHL %EAX
 	POPL %EAX
 	CMPL $0, %EAX
-	JE rot_11
+	JE rot_17
 	PUSHL _b
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-	JMP rot_12
-rot_11:
+	JMP rot_18
+rot_17:
 	PUSHL _c
 	POPL %EDX
 	MOVL %EDX, _maior
 	PUSHL %EDX
 	POPL %EDX
-rot_12:
-rot_10:
-	MOVL $_str_12Len, %EDX
-	MOVL $_str_12, %ECX
+rot_18:
+rot_16:
+	MOVL $_str_15Len, %EDX
+	MOVL $_str_15, %ECX
 	CALL _writeLit
 	PUSHL _maior
 	POPL %EAX
@@ -356,35 +427,44 @@ _str_1:
 	 .ascii " b =  "
 _str_1Len = . - _str_1
 _str_2:
-	 .ascii " a =  "
+	 .ascii "-----------------"
 _str_2Len = . - _str_2
 _str_3:
 	 .ascii " b =  "
 _str_3Len = . - _str_3
 _str_4:
-	 .ascii " c =  "
+	 .ascii "-----------------"
 _str_4Len = . - _str_4
 _str_5:
-	 .ascii " p1 =  "
+	 .ascii " a =  "
 _str_5Len = . - _str_5
 _str_6:
-	 .ascii " p2 =  "
+	 .ascii " b =  "
 _str_6Len = . - _str_6
 _str_7:
-	 .ascii " ok =  "
+	 .ascii " c =  "
 _str_7Len = . - _str_7
 _str_8:
-	 .ascii " ok =  "
+	 .ascii " p1 =  "
 _str_8Len = . - _str_8
 _str_9:
-	 .ascii " nao ok =  "
+	 .ascii " p2 =  "
 _str_9Len = . - _str_9
 _str_10:
-	 .ascii "a eh um numero positivo"
+	 .ascii " ok =  "
 _str_10Len = . - _str_10
 _str_11:
-	 .ascii "a NAO eh um numero positivo"
+	 .ascii " ok =  "
 _str_11Len = . - _str_11
 _str_12:
-	 .ascii "maior dos tres valores: "
+	 .ascii " nao ok =  "
 _str_12Len = . - _str_12
+_str_13:
+	 .ascii "a eh um numero positivo"
+_str_13Len = . - _str_13
+_str_14:
+	 .ascii "a NAO eh um numero positivo"
+_str_14Len = . - _str_14
+_str_15:
+	 .ascii "maior dos tres valores: "
+_str_15Len = . - _str_15
