@@ -503,7 +503,7 @@ final static String yyrule[] = {
 "forUpdate :",
 };
 
-//#line 277 "exemploGC.y"
+//#line 281 "exemploGC.y"
 
   private Yylex lexer;
 
@@ -1041,7 +1041,7 @@ case 26:
 //#line 129 "exemploGC.y"
 {
 			System.out.println("\tPOPL %EAX");
-			System.out.println("\tCMPL $0, %EAX");
+			System.out.println("\tCMPL $1, %EAX");
 			System.out.printf("\tJE rot_%02d\n", pRotRep.peek());
 			System.out.printf("rot_%02d:\n", pRotRep.peek()+1);
 			pRotRep.pop();
@@ -1205,16 +1205,18 @@ break;
 case 58:
 //#line 226 "exemploGC.y"
 {
-			System.out.println("\tPUSHL _"+val_peek(1).sval);           
-			System.out.println("\tPUSHL $1");
-			gcExpArit('+');
-			System.out.println("\tPOPL %EDX");
-			System.out.println("\tMOVL %EDX, _"+val_peek(1).sval);
-			System.out.println("\tPUSHL _"+val_peek(1).sval);                
+			System.out.println("\tPUSHL _"+val_peek(1).sval);       
+			System.out.println("\tPUSHL _"+val_peek(1).sval);        
+			System.out.println("\tPUSHL $1");           
+			gcExpArit('+');                          
+			System.out.println("\tPOPL %EDX");          
+			System.out.println("\tMOVL %EDX, _"+val_peek(1).sval);    
+			System.out.println("\tPOPL %EDX");        
+			System.out.println("\tPUSHL %EDX");                
 		}
 break;
 case 59:
-//#line 234 "exemploGC.y"
+//#line 236 "exemploGC.y"
 {System.out.println("\tPUSHL _"+val_peek(0).sval);
 		System.out.println("\tPUSHL $1");
 		gcExpArit('-');
@@ -1224,18 +1226,20 @@ case 59:
 		}
 break;
 case 60:
-//#line 241 "exemploGC.y"
+//#line 243 "exemploGC.y"
 {
-			System.out.println("\tPUSHL _"+val_peek(1).sval);           
-			System.out.println("\tPUSHL $1");
-			gcExpArit('-');
-			System.out.println("\tPOPL %EDX");
-			System.out.println("\tMOVL %EDX, _"+val_peek(1).sval);
-			System.out.println("\tPUSHL _"+val_peek(1).sval);                
+			System.out.println("\tPUSHL _"+val_peek(1).sval);       
+			System.out.println("\tPUSHL _"+val_peek(1).sval);        
+			System.out.println("\tPUSHL $1");         
+			gcExpArit('-');                         
+			System.out.println("\tPOPL %EDX");        
+			System.out.println("\tMOVL %EDX, _"+val_peek(1).sval);  
+			System.out.println("\tPOPL %EDX");        
+			System.out.println("\tPUSHL %EDX");        
 		}
 break;
 case 61:
-//#line 249 "exemploGC.y"
+//#line 253 "exemploGC.y"
 {
 			int r = proxRot; proxRot += 2;
 			System.out.println("\tPOPL %EAX   # exp3 (falso)");
@@ -1251,12 +1255,12 @@ case 61:
 		}
 break;
 case 62:
-//#line 264 "exemploGC.y"
+//#line 268 "exemploGC.y"
 { 
             System.out.println("\tPOPL %EDX"); 
           }
 break;
-//#line 1183 "Parser.java"
+//#line 1187 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

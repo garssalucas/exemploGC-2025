@@ -128,7 +128,7 @@ cmd :  exp	';' { System.out.println("\tPOPL %EDX"); }
 		  cmd
 		  WHILE '(' exp ')' ';'{
 			System.out.println("\tPOPL %EAX");
-			System.out.println("\tCMPL $0, %EAX");
+			System.out.println("\tCMPL $1, %EAX");
 			System.out.printf("\tJE rot_%02d\n", pRotRep.peek());
 			System.out.printf("rot_%02d:\n", pRotRep.peek()+1);
 			pRotRep.pop();
@@ -224,12 +224,14 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 		System.out.println("\tPUSHL _"+$2);
 		}
 		| ID MAISMAIS {
-			System.out.println("\tPUSHL _"+$1);           
-			System.out.println("\tPUSHL $1");
-			gcExpArit('+');
-			System.out.println("\tPOPL %EDX");
-			System.out.println("\tMOVL %EDX, _"+$1);
-			System.out.println("\tPUSHL _"+$1);                
+			System.out.println("\tPUSHL _"+$1);       
+			System.out.println("\tPUSHL _"+$1);        
+			System.out.println("\tPUSHL $1");           
+			gcExpArit('+');                          
+			System.out.println("\tPOPL %EDX");          
+			System.out.println("\tMOVL %EDX, _"+$1);    
+			System.out.println("\tPOPL %EDX");        
+			System.out.println("\tPUSHL %EDX");                
 		}
 		|MENOSMENOS ID {System.out.println("\tPUSHL _"+$2);
 		System.out.println("\tPUSHL $1");
@@ -239,12 +241,14 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 		System.out.println("\tPUSHL _"+$2);
 		}
 		| ID MENOSMENOS {
-			System.out.println("\tPUSHL _"+$1);           
-			System.out.println("\tPUSHL $1");
-			gcExpArit('-');
-			System.out.println("\tPOPL %EDX");
-			System.out.println("\tMOVL %EDX, _"+$1);
-			System.out.println("\tPUSHL _"+$1);                
+			System.out.println("\tPUSHL _"+$1);       
+			System.out.println("\tPUSHL _"+$1);        
+			System.out.println("\tPUSHL $1");         
+			gcExpArit('-');                         
+			System.out.println("\tPOPL %EDX");        
+			System.out.println("\tMOVL %EDX, _"+$1);  
+			System.out.println("\tPOPL %EDX");        
+			System.out.println("\tPUSHL %EDX");        
 		}
 		| exp '?' exp ':' exp{
 			int r = proxRot; proxRot += 2;
