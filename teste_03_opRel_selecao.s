@@ -7,35 +7,106 @@
 
 
 _start:
-rot_01:
+	PUSHL $100
+	POPL %EDX
+	MOVL %EDX, _a
+	PUSHL %EDX
+	POPL %EDX
+	PUSHL $10
+	POPL %EDX
+	MOVL %EDX, _p_x
+	PUSHL %EDX
+	POPL %EDX
+	PUSHL $20
+	POPL %EDX
+	MOVL %EDX, _p_y
+	PUSHL %EDX
+	POPL %EDX
+	PUSHL $0
+	PUSHL $100
+	POPL %EBX
+	POPL %EAX
+	SUBL %EBX, %EAX
+	PUSHL %EAX
+	POPL %EDX
+	MOVL %EDX, _p_f
+	PUSHL %EDX
+	POPL %EDX
+	PUSHL _a
+	PUSHL $1
+	POPL %EBX
+	POPL %EAX
+	SUBL %EBX, %EAX
+	PUSHL %EAX
+	POPL %EDX
+	MOVL %EDX, _a
+	PUSHL _a
+	POPL %EDX
+	MOVL %EDX, _p_b
+	PUSHL %EDX
+	POPL %EDX
 	MOVL $_str_0Len, %EDX
 	MOVL $_str_0, %ECX
 	CALL _writeLit
-	CALL _writeln
-	PUSHL $_num
-	CALL _read
-	POPL %EDX
-	MOVL %EAX, (%EDX)
-	MOVL $_str_1Len, %EDX
-	MOVL $_str_1, %ECX
-	CALL _writeLit
-	PUSHL _num
+	PUSHL _p_x
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-		# terminou o bloco...
-	PUSHL _num
-	PUSHL $0
+	MOVL $_str_1Len, %EDX
+	MOVL $_str_1, %ECX
+	CALL _writeLit
+	PUSHL _p_y
 	POPL %EAX
+	CALL _write
+	CALL _writeln
+	MOVL $_str_2Len, %EDX
+	MOVL $_str_2, %ECX
+	CALL _writeLit
+	PUSHL _p_f
+	POPL %EAX
+	CALL _write
+	CALL _writeln
+	MOVL $_str_3Len, %EDX
+	MOVL $_str_3, %ECX
+	CALL _writeLit
+	PUSHL _p_b
+	POPL %EAX
+	CALL _write
+	CALL _writeln
+	PUSHL _p_x
 	POPL %EDX
-	CMPL %EAX, %EDX
-	MOVL $0, %EAX
-	SETG  %AL
-	PUSHL %EAX
+	MOVL %EDX, _a
+	PUSHL %EDX
+	POPL %EDX
+	PUSHL _a
+	PUSHL _a
+	PUSHL $1
+	POPL %EBX
 	POPL %EAX
-	CMPL $1, %EAX
-	JE rot_01
-rot_02:
+	SUBL %EBX, %EAX
+	PUSHL %EAX
+	POPL %EDX
+	MOVL %EDX, _a
+	POPL %EDX
+	PUSHL %EDX
+	POPL %EDX
+	MOVL %EDX, _p_b
+	PUSHL %EDX
+	POPL %EDX
+	MOVL $_str_4Len, %EDX
+	MOVL $_str_4, %ECX
+	CALL _writeLit
+	PUSHL _p_b
+	POPL %EAX
+	CALL _write
+	CALL _writeln
+	MOVL $_str_5Len, %EDX
+	MOVL $_str_5, %ECX
+	CALL _writeLit
+	PUSHL _a
+	POPL %EAX
+	CALL _write
+	CALL _writeln
 
 
 
@@ -128,7 +199,11 @@ _fimread2:
 #
 # variaveis globais
 #
-_num:	.zero 4
+_p_x:	.zero 4
+_p_y:	.zero 4
+_p_f:	.zero 4
+_p_b:	.zero 4
+_a:	.zero 4
 
 #
 # area de literais
@@ -140,8 +215,20 @@ __fim_msg:
 
 
 _str_0:
-	 .ascii "Informe um numero <= 0: "
+	 .ascii "X = "
 _str_0Len = . - _str_0
 _str_1:
-	 .ascii "Valor lido: "
+	 .ascii "Y = "
 _str_1Len = . - _str_1
+_str_2:
+	 .ascii "F = "
+_str_2Len = . - _str_2
+_str_3:
+	 .ascii "B = "
+_str_3Len = . - _str_3
+_str_4:
+	 .ascii "B = "
+_str_4Len = . - _str_4
+_str_5:
+	 .ascii "A = "
+_str_5Len = . - _str_5

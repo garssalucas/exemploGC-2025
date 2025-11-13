@@ -1,11 +1,25 @@
-int num;
+struct Ponto {
+    int x;
+    int y;
+	float f;
+	bool b;
+};
 
+Ponto p;
+int a;
 
 void main() {
-   do {
-    		write("Informe um numero <= 0: ");
-    		read( num );
-    		write("Valor lido: ", num);
-   } while ( num > 0 );        
- }
-
+	a=100;
+    p.x = 10;
+    p.y = 20;
+	p.f = 0-100;
+	p.b = --a;
+    write("X = ", p.x);
+    write("Y = ", p.y);
+	write("F = ", p.f);
+    write("B = ", p.b);
+	a = p.x;
+	p.b = a--;
+    write("B = ", p.b);
+	write("A = ", a);
+}

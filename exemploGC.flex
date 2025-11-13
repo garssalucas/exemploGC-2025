@@ -53,12 +53,14 @@ NL  = \n | \r | \r\n
 "," |
 "?" |
 ":" |
+"." |
 "\[" | 
 "\]"    { return (int) yycharat(0); }
 
 "+="   { return Parser.MAISIGUAL; }
 "++"    { return Parser.MAISMAIS; }
 "--"    { return Parser.MENOSMENOS; }
+"struct"      { return Parser.STRUCT; }
 
 
 

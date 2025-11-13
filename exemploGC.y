@@ -3,6 +3,7 @@
   import java.io.*;
   import java.util.ArrayList;
   import java.util.Stack;
+  import java.util.*;
 %}
  
 
@@ -12,6 +13,7 @@
 %token AND, OR
 %token MAISMAIS, MENOSMENOS, MAISIGUAL
 %token BREAK, CONTINUE
+%token STRUCT
 
 %right '=' MAISIGUAL
 %right '?' ':'
@@ -39,13 +41,55 @@ mainF : VOID MAIN '(' ')'   { System.out.println("_start:"); }
         '{' lcmd  { geraFinal(); } '}'
          ; 
 
-dList : decl dList | ;
+dList : decl dList 
+		| declStruct dList
+		| 
+		;
+
+declStruct
+    : STRUCT ID
+      {
+        nomeStructAtual = $2;
+        camposStructAtual = new ArrayList<>();
+      }
+      '{' listaCampos '}' ';'
+      {
+        structModels.put(nomeStructAtual, camposStructAtual);
+      }
+    ;
+
+listaCampos
+    : campo listaCampos
+    | 
+    ;
+
+campo
+    : type ID ';'
+      {
+        camposStructAtual.add(new TS_entry($2, $1));
+      }
+    ;
 
 decl : type ID ';' {  TS_entry nodo = ts.pesquisa($2);
     	                if (nodo != null) 
                             yyerror("(sem) variavel >" + $2 + "< jah declarada");
-                        else ts.insert(new TS_entry($2, $1)); }
-      ;
+                        else ts.insert(new TS_entry($2, $1)); 
+					}
+					 | ID ID ';'
+								{
+									String tipo = $1;
+									String var = $2;
+
+									if (!structModels.containsKey(tipo)) {
+										yyerror("tipo struct '"+tipo+"' não declarado");
+									} else {
+										for (TS_entry campo : structModels.get(tipo)) {
+											String nomeReal = var + "_" + campo.getId();
+											ts.insert(new TS_entry(nomeReal, campo.getTipo()));
+										}
+									}
+								}
+				;
 
 type : INT    { $$ = INT; }
      | FLOAT  { $$ = FLOAT; }
@@ -179,7 +223,17 @@ restoIf : ELSE  {
 exp :  NUM  { System.out.println("\tPUSHL $"+$1); } 
     |  TRUE  { System.out.println("\tPUSHL $1"); } 
     |  FALSE  { System.out.println("\tPUSHL $0"); }      
- 		| ID   { System.out.println("\tPUSHL _"+$1); }
+ 	| ID   { System.out.println("\tPUSHL _"+$1); }
+	| ID '.' ID
+				{
+					String nomeReal = $1 + "_" + $3;
+
+					TS_entry n = ts.pesquisa(nomeReal);
+					if (n == null)
+						yyerror("campo "+$3+" inexistente em struct "+$1);
+
+					System.out.println("\tPUSHL _"+nomeReal);
+				}
     | '(' exp	')' 
     | '!' exp       { gcExpNot(); }
      
@@ -206,6 +260,18 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
   						   System.out.println("\tMOVL %EDX, _"+$1);
 						   System.out.println("\tPUSHL %EDX");
 					     }
+		| ID '.' ID '=' exp
+							{
+								String nomeReal = $1 + "_" + $3;
+
+								TS_entry n = ts.pesquisa(nomeReal);
+								if (n == null)
+									yyerror("campo "+$3+" inexistente em struct "+$1);
+
+								System.out.println("\tPOPL %EDX");
+								System.out.println("\tMOVL %EDX, _"+nomeReal);
+								System.out.println("\tPUSHL %EDX");
+							}				 
 
 		| ID MAISIGUAL exp { System.out.println("\tPOPL %EDX");
 					   System.out.println("\tPUSHL _"+$1);
@@ -289,6 +355,10 @@ forUpdate
   private Stack<Integer> pRotRep = new Stack<Integer>();
   private Stack<Integer> pRotSel = new Stack<Integer>();
   private int proxRot = 1;
+
+  Map<String, List<TS_entry>> structModels = new HashMap<>();
+  List<TS_entry> camposStructAtual;
+  String nomeStructAtual;
 
 
   public static int ARRAY = 100;
