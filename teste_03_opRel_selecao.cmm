@@ -3,21 +3,58 @@ struct Pessoa {
     int peso;
 };
 
-Pessoa p;
-int notas[3];
+int notas[10];
 int i;
+int soma;
+Pessoa p;
+int maior;
+int x;
 
 void main() {
+
     p.idade = 30;
     p.peso  = 80;
 
-    for(i=0;i<10;i++)
-		notas[i] = i;
-	
-	
-    write("idade = ", p.idade);
-    write("peso = ", p.peso);
-    write("notas[0] = ", notas[0]);
-    write("notas[1] = ", notas[1]);
-    write("notas[9] = ", notas[9]);
+    write("Idade: ", p.idade);
+    write("Peso: ", p.peso);
+
+    for (i = 0; i < 10; i++)
+        notas[i] = i * 2;
+
+    i = 0;
+    soma = 0;
+
+    while (i < 10) {
+        soma = soma + notas[i];
+        i++;
+    }
+
+    write("Soma = ", soma);
+
+    
+    maior = (p.idade > p.peso) ? p.idade : p.peso;
+    write("Maior idade/peso = ", maior);
+
+    i = 0;
+    do {
+        if (i == 5){ i++;
+            continue;}
+
+        write("i = ", i);
+
+        if (i == 8)
+            break;
+
+        i++;
+    } while (i < 10);
+
+    
+    x = 0;
+    for (i = 0; i < 5; i++) {
+        x += i++;
+        write("Parcial de x = ", x);
+    }
+
+    write("Final x = ", x);
+
 }

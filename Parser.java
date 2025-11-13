@@ -1143,7 +1143,7 @@ case 33:
 //#line 177 "exemploGC.y"
 {
           pRotRep.push(proxRot); 
-          proxRot += 1;
+          proxRot += 2;
           System.out.printf("rot_%02d:\n", pRotRep.peek());
 		  }
 break;

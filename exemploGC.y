@@ -176,7 +176,7 @@ cmd :  exp	';' { System.out.println("\tPOPL %EDX"); }
 										}
 	    | DO {
           pRotRep.push(proxRot); 
-          proxRot += 1;
+          proxRot += 2;
           System.out.printf("rot_%02d:\n", pRotRep.peek());
 		  }
 		  cmd
