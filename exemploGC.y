@@ -70,18 +70,28 @@ campo
       }
     ;
 
-decl : type ID ';' {  TS_entry nodo = ts.pesquisa($2);
-    	                if (nodo != null) 
-                            yyerror("(sem) variavel >" + $2 + "< jah declarada");
-                        else ts.insert(new TS_entry($2, $1)); 
-					}
+decl : 	type ID '[' NUM ']' ';'
+								{
+									TS_entry nodo = ts.pesquisa($2);
+									if (nodo != null)
+										yyerror("variável >" + $2 + "< jah declarada");
+									else
+										ts.insert(new TS_entry($2, $1, Integer.parseInt($4), $1)); 
+								}
+					| type ID ';' 
+								{  
+									TS_entry nodo = ts.pesquisa($2);
+									if (nodo != null) 
+										yyerror("(sem) variavel >" + $2 + "< jah declarada");
+									else ts.insert(new TS_entry($2, $1)); 
+								}
 					 | ID ID ';'
 								{
 									String tipo = $1;
 									String var = $2;
 
 									if (!structModels.containsKey(tipo)) {
-										yyerror("tipo struct '"+tipo+"' não declarado");
+										yyerror("tipo struct '"+tipo+"' nao declarado");
 									} else {
 										for (TS_entry campo : structModels.get(tipo)) {
 											String nomeReal = var + "_" + campo.getId();
@@ -234,6 +244,15 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 
 					System.out.println("\tPUSHL _"+nomeReal);
 				}
+	| ID '[' exp ']'
+				{
+					TS_entry t = ts.pesquisa($1);
+					if (t == null || t.getNumElem() <= 0)
+						yyerror("variável " + $1 + " não é array");
+					System.out.println("\tPOPL %EAX");      
+					System.out.println("\tIMULL $4, %EAX"); 
+					System.out.println("\tPUSHL _"+$1+"(,%EAX)"); 
+				}			
     | '(' exp	')' 
     | '!' exp       { gcExpNot(); }
      
@@ -272,7 +291,18 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 								System.out.println("\tMOVL %EDX, _"+nomeReal);
 								System.out.println("\tPUSHL %EDX");
 							}				 
+		| ID '[' exp ']' '=' exp
+							{
+								TS_entry t = ts.pesquisa($1);
+								if (t == null || t.getNumElem() <= 0)
+									yyerror("variável " + $1 + " não é array");
 
+								System.out.println("\tPOPL %EDX"); 
+								System.out.println("\tPOPL %EAX"); 
+								System.out.println("\tIMULL $4, %EAX");
+								System.out.println("\tMOVL %EDX, _"+$1+"(,%EAX)");
+								System.out.println("\tPUSHL %EDX");  
+							}
 		| ID MAISIGUAL exp { System.out.println("\tPOPL %EDX");
 					   System.out.println("\tPUSHL _"+$1);
 					   System.out.println("\tPUSHL %EDX");

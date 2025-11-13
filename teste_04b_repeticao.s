@@ -7,99 +7,81 @@
 
 
 _start:
-	PUSHL $30
+	PUSHL $5
 	POPL %EDX
-	MOVL %EDX, _p_idade
+	MOVL %EDX, _c
 	PUSHL %EDX
 	POPL %EDX
-	PUSHL $80
-	POPL %EDX
-	MOVL %EDX, _p_peso
+	MOVL %EDX, _b
 	PUSHL %EDX
 	POPL %EDX
-	PUSHL $0
-	POPL %EDX
-	MOVL %EDX, _i
+	MOVL %EDX, _a
 	PUSHL %EDX
 	POPL %EDX
-rot_04:
-	PUSHL _i
-	PUSHL $10
-	POPL %EAX
-	POPL %EDX
-	CMPL %EAX, %EDX
-	MOVL $0, %EAX
-	SETL  %AL
-	PUSHL %EAX
-	POPL %EDX
-	CMPL $0, %EAX
-	JE rot_02
-	JNE rot_03
-rot_01:
-	PUSHL _i
-	PUSHL _i
-	PUSHL $1
-	POPL %EBX
-	POPL %EAX
-	ADDL %EBX, %EAX
-	PUSHL %EAX
-	POPL %EDX
-	MOVL %EDX, _i
-	POPL %EDX
-	PUSHL %EDX
-	JMP rot_04
-rot_03:
-	PUSHL _i
-	PUSHL _i
-	POPL %EDX
-	POPL %EAX
-	IMULL $4, %EAX
-	MOVL %EDX, _notas(,%EAX)
-	PUSHL %EDX
-	POPL %EDX
-	JMP rot_01
-rot_02:
 	MOVL $_str_0Len, %EDX
 	MOVL $_str_0, %ECX
 	CALL _writeLit
-	PUSHL _p_idade
+	PUSHL _a
 	POPL %EAX
 	CALL _write
 	CALL _writeln
 	MOVL $_str_1Len, %EDX
 	MOVL $_str_1, %ECX
 	CALL _writeLit
-	PUSHL _p_peso
+	PUSHL _b
 	POPL %EAX
 	CALL _write
 	CALL _writeln
 	MOVL $_str_2Len, %EDX
 	MOVL $_str_2, %ECX
 	CALL _writeLit
-	PUSHL $0
-	POPL %EAX
-	IMULL $4, %EAX
-	PUSHL _notas(,%EAX)
+	PUSHL _c
 	POPL %EAX
 	CALL _write
 	CALL _writeln
+	PUSHL $7
+	POPL %EDX
+	MOVL %EDX, _c
+	PUSHL %EDX
+	PUSHL $3
+	POPL %EBX
+	POPL %EAX
+	IMULL %EBX, %EAX
+	PUSHL %EAX
+	POPL %EDX
+	MOVL %EDX, _b
+	PUSHL %EDX
+	PUSHL $2
+	POPL %EBX
+	POPL %EAX
+	ADDL %EBX, %EAX
+	PUSHL %EAX
+	POPL %EDX
+	MOVL %EDX, _a
+	PUSHL %EDX
+	POPL %EDX
 	MOVL $_str_3Len, %EDX
 	MOVL $_str_3, %ECX
 	CALL _writeLit
-	PUSHL $1
-	POPL %EAX
-	IMULL $4, %EAX
-	PUSHL _notas(,%EAX)
-	POPL %EAX
-	CALL _write
 	CALL _writeln
 	MOVL $_str_4Len, %EDX
 	MOVL $_str_4, %ECX
 	CALL _writeLit
-	PUSHL $9
+	PUSHL _a
 	POPL %EAX
-	IMULL $4, %EAX
-	PUSHL _notas(,%EAX)
+	CALL _write
+	CALL _writeln
+	MOVL $_str_5Len, %EDX
+	MOVL $_str_5, %ECX
+	CALL _writeLit
+	PUSHL _b
+	POPL %EAX
+	CALL _write
+	CALL _writeln
+	MOVL $_str_6Len, %EDX
+	MOVL $_str_6, %ECX
+	CALL _writeLit
+	PUSHL _c
 	POPL %EAX
 	CALL _write
 	CALL _writeln
@@ -195,10 +177,9 @@ _fimread2:
 #
 # variaveis globais
 #
-_p_idade:	.zero 4
-_p_peso:	.zero 4
-_notas:	.zero 12
-_i:	.zero 4
+_a:	.zero 4
+_b:	.zero 4
+_c:	.zero 4
 
 #
 # area de literais
@@ -210,17 +191,23 @@ __fim_msg:
 
 
 _str_0:
-	 .ascii "idade = "
+	 .ascii " a =  "
 _str_0Len = . - _str_0
 _str_1:
-	 .ascii "peso = "
+	 .ascii " b =  "
 _str_1Len = . - _str_1
 _str_2:
-	 .ascii "notas[0] = "
+	 .ascii " c =  "
 _str_2Len = . - _str_2
 _str_3:
-	 .ascii "notas[1] = "
+	 .ascii " "
 _str_3Len = . - _str_3
 _str_4:
-	 .ascii "notas[9] = "
+	 .ascii " a =  "
 _str_4Len = . - _str_4
+_str_5:
+	 .ascii " b =  "
+_str_5Len = . - _str_5
+_str_6:
+	 .ascii " c =  "
+_str_6Len = . - _str_6

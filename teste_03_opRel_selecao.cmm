@@ -1,25 +1,23 @@
-struct Ponto {
-    int x;
-    int y;
-	float f;
-	bool b;
+struct Pessoa {
+    int idade;
+    int peso;
 };
 
-Ponto p;
-int a;
+Pessoa p;
+int notas[3];
+int i;
 
 void main() {
-	a=100;
-    p.x = 10;
-    p.y = 20;
-	p.f = 0-100;
-	p.b = --a;
-    write("X = ", p.x);
-    write("Y = ", p.y);
-	write("F = ", p.f);
-    write("B = ", p.b);
-	a = p.x;
-	p.b = a--;
-    write("B = ", p.b);
-	write("A = ", a);
+    p.idade = 30;
+    p.peso  = 80;
+
+    for(i=0;i<10;i++)
+		notas[i] = i;
+	
+	
+    write("idade = ", p.idade);
+    write("peso = ", p.peso);
+    write("notas[0] = ", notas[0]);
+    write("notas[1] = ", notas[1]);
+    write("notas[9] = ", notas[9]);
 }

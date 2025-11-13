@@ -7,102 +7,79 @@
 
 
 _start:
-	PUSHL $30
+rot_01:
+	PUSHL $1
+	POPL %EAX   # desvia se falso...
+	CMPL $0, %EAX
+	JE rot_02
+	MOVL $_str_0Len, %EDX
+	MOVL $_str_0, %ECX
+	CALL _writeLit
+	CALL _writeln
+	PUSHL $_num
+	CALL _read
 	POPL %EDX
-	MOVL %EDX, _p_idade
-	PUSHL %EDX
+	MOVL %EAX, (%EDX)
+	PUSHL $1
 	POPL %EDX
-	PUSHL $80
-	POPL %EDX
-	MOVL %EDX, _p_peso
+	MOVL %EDX, _cont
 	PUSHL %EDX
 	POPL %EDX
 	PUSHL $0
 	POPL %EDX
-	MOVL %EDX, _i
+	MOVL %EDX, _result
 	PUSHL %EDX
 	POPL %EDX
-rot_04:
-	PUSHL _i
-	PUSHL $10
+rot_03:
+	PUSHL _num
+	PUSHL $1
+	POPL %EBX
+	POPL %EAX
+	ADDL %EBX, %EAX
+	PUSHL %EAX
+	PUSHL _cont
 	POPL %EAX
 	POPL %EDX
 	CMPL %EAX, %EDX
 	MOVL $0, %EAX
-	SETL  %AL
+	SETG  %AL
+	PUSHL %EAX
+	POPL %EAX   # desvia se falso...
+	CMPL $0, %EAX
+	JE rot_04
+	PUSHL _result
+	PUSHL _cont
+	POPL %EBX
+	POPL %EAX
+	ADDL %EBX, %EAX
 	PUSHL %EAX
 	POPL %EDX
-	CMPL $0, %EAX
-	JE rot_02
-	JNE rot_03
-rot_01:
-	PUSHL _i
-	PUSHL _i
+	MOVL %EDX, _result
+	PUSHL %EDX
+	POPL %EDX
+	PUSHL _cont
 	PUSHL $1
 	POPL %EBX
 	POPL %EAX
 	ADDL %EBX, %EAX
 	PUSHL %EAX
 	POPL %EDX
-	MOVL %EDX, _i
-	POPL %EDX
-	PUSHL %EDX
-	JMP rot_04
-rot_03:
-	PUSHL _i
-	PUSHL _i
-	POPL %EDX
-	POPL %EAX
-	IMULL $4, %EAX
-	MOVL %EDX, _notas(,%EAX)
+	MOVL %EDX, _cont
 	PUSHL %EDX
 	POPL %EDX
-	JMP rot_01
-rot_02:
-	MOVL $_str_0Len, %EDX
-	MOVL $_str_0, %ECX
-	CALL _writeLit
-	PUSHL _p_idade
-	POPL %EAX
-	CALL _write
-	CALL _writeln
+		# terminou o bloco...
+	JMP rot_03   # terminou cmd na linha de cima
+rot_04:
 	MOVL $_str_1Len, %EDX
 	MOVL $_str_1, %ECX
 	CALL _writeLit
-	PUSHL _p_peso
+	PUSHL _result
 	POPL %EAX
 	CALL _write
 	CALL _writeln
-	MOVL $_str_2Len, %EDX
-	MOVL $_str_2, %ECX
-	CALL _writeLit
-	PUSHL $0
-	POPL %EAX
-	IMULL $4, %EAX
-	PUSHL _notas(,%EAX)
-	POPL %EAX
-	CALL _write
-	CALL _writeln
-	MOVL $_str_3Len, %EDX
-	MOVL $_str_3, %ECX
-	CALL _writeLit
-	PUSHL $1
-	POPL %EAX
-	IMULL $4, %EAX
-	PUSHL _notas(,%EAX)
-	POPL %EAX
-	CALL _write
-	CALL _writeln
-	MOVL $_str_4Len, %EDX
-	MOVL $_str_4, %ECX
-	CALL _writeLit
-	PUSHL $9
-	POPL %EAX
-	IMULL $4, %EAX
-	PUSHL _notas(,%EAX)
-	POPL %EAX
-	CALL _write
-	CALL _writeln
+		# terminou o bloco...
+	JMP rot_01   # terminou cmd na linha de cima
+rot_02:
 
 
 
@@ -195,10 +172,9 @@ _fimread2:
 #
 # variaveis globais
 #
-_p_idade:	.zero 4
-_p_peso:	.zero 4
-_notas:	.zero 12
-_i:	.zero 4
+_num:	.zero 4
+_cont:	.zero 4
+_result:	.zero 4
 
 #
 # area de literais
@@ -210,17 +186,8 @@ __fim_msg:
 
 
 _str_0:
-	 .ascii "idade = "
+	 .ascii "Informe um numero: "
 _str_0Len = . - _str_0
 _str_1:
-	 .ascii "peso = "
+	 .ascii "Valor do somatorio(1..num): "
 _str_1Len = . - _str_1
-_str_2:
-	 .ascii "notas[0] = "
-_str_2Len = . - _str_2
-_str_3:
-	 .ascii "notas[1] = "
-_str_3Len = . - _str_3
-_str_4:
-	 .ascii "notas[9] = "
-_str_4Len = . - _str_4

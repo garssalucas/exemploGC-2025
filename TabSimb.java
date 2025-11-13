@@ -35,9 +35,14 @@ public class TabSimb
 	public void geraGlobais() {
           // assume que todas variáveis são globais e inteiras.
 	      for (TS_entry nodo : lista) {
-	            	System.out.println("_"+nodo.getId()+":"+"	.zero 4");
-	            }
+	        if (nodo.getNumElem() > 0) {
+            int tam = nodo.getNumElem() * 4;
+            System.out.println("_" + nodo.getId() + ":\t.zero " + tam);
+          } else {
+            System.out.println("_" + nodo.getId() + ":\t.zero 4");
+          }
 	      }
+	}
 	     
 
 
