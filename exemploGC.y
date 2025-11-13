@@ -134,20 +134,18 @@ cmd :  exp	';' { System.out.println("\tPOPL %EDX"); }
 			pRotRep.pop();
 		  }
 
-		| FOR '(' exp ';' {
-				          System.out.println("\tPOPL %EDX");
-						  pRotRep.push(proxRot);
+		| FOR '(' forVazio ';' {
+				          pRotRep.push(proxRot);
 						  proxRot += 4;
 						  System.out.printf("rot_%02d:\n", pRotRep.peek()+3);  
 			              }
-			      exp ';' {
-				          System.out.println("\tPOPL %EAX");
-						  System.out.println("\tCMPL $0, %EAX");
+			      forVazio ';' {
+				          System.out.println("\tCMPL $0, %EAX");
 						  System.out.printf("\tJE rot_%02d\n", pRotRep.peek()+1);  
 						  System.out.printf("\tJNE rot_%02d\n", pRotRep.peek()+2);
 						  System.out.printf("rot_%02d:\n", pRotRep.peek());
 			              }
-				  exp ')' {
+				  forUpdate ')' {
 						  System.out.printf("\tJMP rot_%02d\n", pRotRep.peek()+3);
 						  System.out.printf("rot_%02d:\n", pRotRep.peek()+2);
 			              }
@@ -261,7 +259,18 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 			System.out.println("\tPUSHL %EAX");        
 			System.out.printf("rot_%02d:\n", r+1);
 		}
-		;				
+		;
+forVazio
+    : exp { 
+            System.out.println("\tPOPL %EDX"); 
+          }
+    | 
+    ;
+
+forUpdate
+    : exp 
+    | 
+    ;						
 
 
 %%

@@ -51,7 +51,7 @@
 
   29  $$11 :
 
-  30  cmd : FOR '(' exp ';' $$9 exp ';' $$10 exp ')' $$11 cmd
+  30  cmd : FOR '(' forVazio ';' $$9 forVazio ';' $$10 forUpdate ')' $$11 cmd
   31      | BREAK ';'
   32      | CONTINUE ';'
 
@@ -86,6 +86,12 @@
   59      | MENOSMENOS ID
   60      | ID MENOSMENOS
   61      | exp '?' exp ':' exp
+
+  62  forVazio : exp
+  63           |
+
+  64  forUpdate : exp
+  65            |
 
 state 0
 	$accept : . prog $end  (0)
@@ -354,7 +360,7 @@ state 28
 
 
 state 29
-	cmd : FOR . '(' exp ';' $$9 exp ';' $$10 exp ')' $$11 cmd  (30)
+	cmd : FOR . '(' forVazio ';' $$9 forVazio ';' $$10 forUpdate ')' $$11 cmd  (30)
 
 	'('  shift 49
 	.  error
@@ -586,7 +592,8 @@ state 48
 
 
 state 49
-	cmd : FOR '(' . exp ';' $$9 exp ';' $$10 exp ')' $$11 cmd  (30)
+	cmd : FOR '(' . forVazio ';' $$9 forVazio ';' $$10 forUpdate ')' $$11 cmd  (30)
+	forVazio : .  (63)
 
 	ID  shift 20
 	NUM  shift 21
@@ -596,9 +603,10 @@ state 49
 	MENOSMENOS  shift 31
 	'!'  shift 34
 	'('  shift 35
-	.  error
+	';'  reduce 63
 
 	exp  goto 80
+	forVazio  goto 81
 
 
 state 50
@@ -676,7 +684,7 @@ state 55
 	'*'  shift 69
 	'/'  shift 70
 	'%'  shift 71
-	')'  shift 81
+	')'  shift 82
 	.  error
 
 
@@ -701,7 +709,7 @@ state 56
 	'!'  shift 34
 	'('  shift 35
 	'{'  shift 36
-	'}'  shift 82
+	'}'  shift 83
 	.  error
 
 	cmd  goto 38
@@ -727,7 +735,7 @@ state 58
 	'('  shift 35
 	.  error
 
-	exp  goto 83
+	exp  goto 84
 
 
 state 59
@@ -743,7 +751,7 @@ state 59
 	'('  shift 35
 	.  error
 
-	exp  goto 84
+	exp  goto 85
 
 
 state 60
@@ -759,7 +767,7 @@ state 60
 	'('  shift 35
 	.  error
 
-	exp  goto 85
+	exp  goto 86
 
 
 state 61
@@ -775,7 +783,7 @@ state 61
 	'('  shift 35
 	.  error
 
-	exp  goto 86
+	exp  goto 87
 
 
 state 62
@@ -791,7 +799,7 @@ state 62
 	'('  shift 35
 	.  error
 
-	exp  goto 87
+	exp  goto 88
 
 
 state 63
@@ -807,7 +815,7 @@ state 63
 	'('  shift 35
 	.  error
 
-	exp  goto 88
+	exp  goto 89
 
 
 state 64
@@ -823,7 +831,7 @@ state 64
 	'('  shift 35
 	.  error
 
-	exp  goto 89
+	exp  goto 90
 
 
 state 65
@@ -839,7 +847,7 @@ state 65
 	'('  shift 35
 	.  error
 
-	exp  goto 90
+	exp  goto 91
 
 
 state 66
@@ -855,7 +863,7 @@ state 66
 	'('  shift 35
 	.  error
 
-	exp  goto 91
+	exp  goto 92
 
 
 state 67
@@ -871,7 +879,7 @@ state 67
 	'('  shift 35
 	.  error
 
-	exp  goto 92
+	exp  goto 93
 
 
 state 68
@@ -887,7 +895,7 @@ state 68
 	'('  shift 35
 	.  error
 
-	exp  goto 93
+	exp  goto 94
 
 
 state 69
@@ -903,7 +911,7 @@ state 69
 	'('  shift 35
 	.  error
 
-	exp  goto 94
+	exp  goto 95
 
 
 state 70
@@ -919,7 +927,7 @@ state 70
 	'('  shift 35
 	.  error
 
-	exp  goto 95
+	exp  goto 96
 
 
 state 71
@@ -935,7 +943,7 @@ state 71
 	'('  shift 35
 	.  error
 
-	exp  goto 96
+	exp  goto 97
 
 
 state 72
@@ -1019,7 +1027,7 @@ state 74
 state 75
 	cmd : READ '(' ID . ')' ';'  (19)
 
-	')'  shift 97
+	')'  shift 98
 	.  error
 
 
@@ -1028,10 +1036,10 @@ state 76
 	cmd : WRITE '(' LIT . $$4 ',' exp ')' ';'  (18)
 	$$4 : .  (17)
 
-	')'  shift 98
+	')'  shift 99
 	','  reduce 17
 
-	$$4  goto 99
+	$$4  goto 100
 
 
 state 77
@@ -1068,13 +1076,13 @@ state 77
 	'%'  shift 71
 	')'  reduce 23
 
-	$$7  goto 100
+	$$7  goto 101
 
 
 state 78
 	cmd : DO $$8 cmd . WHILE '(' exp ')' ';'  (26)
 
-	WHILE  shift 101
+	WHILE  shift 102
 	.  error
 
 
@@ -1091,11 +1099,10 @@ state 79
 	'('  shift 35
 	.  error
 
-	exp  goto 102
+	exp  goto 103
 
 
 state 80
-	cmd : FOR '(' exp . ';' $$9 exp ';' $$10 exp ')' $$11 cmd  (30)
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1110,6 +1117,7 @@ state 80
 	exp : exp . OR exp  (53)
 	exp : exp . AND exp  (54)
 	exp : exp . '?' exp ':' exp  (61)
+	forVazio : exp .  (62)
 
 	EQ  shift 58
 	LEQ  shift 59
@@ -1125,23 +1133,29 @@ state 80
 	'*'  shift 69
 	'/'  shift 70
 	'%'  shift 71
-	';'  shift 103
-	.  error
+	';'  reduce 62
 
 
 state 81
+	cmd : FOR '(' forVazio . ';' $$9 forVazio ';' $$10 forUpdate ')' $$11 cmd  (30)
+
+	';'  shift 104
+	.  error
+
+
+state 82
 	exp : '(' exp ')' .  (40)
 
 	.  reduce 40
 
 
-state 82
+state 83
 	cmd : '{' lcmd '}' .  (15)
 
 	.  reduce 15
 
 
-state 83
+state 84
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1177,7 +1191,7 @@ state 83
 	';'  reduce 49
 
 
-state 84
+state 85
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1213,7 +1227,7 @@ state 84
 	';'  reduce 50
 
 
-state 85
+state 86
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1249,7 +1263,7 @@ state 85
 	';'  reduce 51
 
 
-state 86
+state 87
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1285,7 +1299,7 @@ state 86
 	';'  reduce 52
 
 
-state 87
+state 88
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1321,7 +1335,7 @@ state 87
 	';'  reduce 54
 
 
-state 88
+state 89
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1357,7 +1371,7 @@ state 88
 	';'  reduce 53
 
 
-state 89
+state 90
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1381,7 +1395,7 @@ state 89
 	AND  shift 62
 	OR  shift 63
 	'?'  shift 64
-	':'  shift 104
+	':'  shift 105
 	'>'  shift 65
 	'<'  shift 66
 	'+'  shift 67
@@ -1392,7 +1406,7 @@ state 89
 	.  error
 
 
-state 90
+state 91
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1428,7 +1442,7 @@ state 90
 	';'  reduce 47
 
 
-state 91
+state 92
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1464,7 +1478,7 @@ state 91
 	';'  reduce 48
 
 
-state 92
+state 93
 	exp : exp . '+' exp  (42)
 	exp : exp '+' exp .  (42)
 	exp : exp . '-' exp  (43)
@@ -1500,7 +1514,7 @@ state 92
 	';'  reduce 42
 
 
-state 93
+state 94
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp '-' exp .  (43)
@@ -1536,7 +1550,7 @@ state 93
 	';'  reduce 43
 
 
-state 94
+state 95
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1556,7 +1570,7 @@ state 94
 	.  reduce 44
 
 
-state 95
+state 96
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1576,7 +1590,7 @@ state 95
 	.  reduce 45
 
 
-state 96
+state 97
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1596,42 +1610,42 @@ state 96
 	.  reduce 46
 
 
-state 97
-	cmd : READ '(' ID ')' . ';'  (19)
-
-	';'  shift 105
-	.  error
-
-
 state 98
-	cmd : WRITE '(' LIT ')' . ';'  (16)
+	cmd : READ '(' ID ')' . ';'  (19)
 
 	';'  shift 106
 	.  error
 
 
 state 99
-	cmd : WRITE '(' LIT $$4 . ',' exp ')' ';'  (18)
+	cmd : WRITE '(' LIT ')' . ';'  (16)
 
-	','  shift 107
+	';'  shift 107
 	.  error
 
 
 state 100
-	cmd : IF '(' exp $$7 . ')' cmd restoIf  (24)
+	cmd : WRITE '(' LIT $$4 . ',' exp ')' ';'  (18)
 
-	')'  shift 108
+	','  shift 108
 	.  error
 
 
 state 101
-	cmd : DO $$8 cmd WHILE . '(' exp ')' ';'  (26)
+	cmd : IF '(' exp $$7 . ')' cmd restoIf  (24)
 
-	'('  shift 109
+	')'  shift 109
 	.  error
 
 
 state 102
+	cmd : DO $$8 cmd WHILE . '(' exp ')' ';'  (26)
+
+	'('  shift 110
+	.  error
+
+
+state 103
 	cmd : WHILE $$5 '(' exp . ')' $$6 cmd  (22)
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
@@ -1662,49 +1676,21 @@ state 102
 	'*'  shift 69
 	'/'  shift 70
 	'%'  shift 71
-	')'  shift 110
+	')'  shift 111
 	.  error
 
 
-state 103
-	cmd : FOR '(' exp ';' . $$9 exp ';' $$10 exp ')' $$11 cmd  (30)
+state 104
+	cmd : FOR '(' forVazio ';' . $$9 forVazio ';' $$10 forUpdate ')' $$11 cmd  (30)
 	$$9 : .  (27)
 
 	.  reduce 27
 
-	$$9  goto 111
-
-
-state 104
-	exp : exp '?' exp ':' . exp  (61)
-
-	ID  shift 20
-	NUM  shift 21
-	TRUE  shift 27
-	FALSE  shift 28
-	MAISMAIS  shift 30
-	MENOSMENOS  shift 31
-	'!'  shift 34
-	'('  shift 35
-	.  error
-
-	exp  goto 112
+	$$9  goto 112
 
 
 state 105
-	cmd : READ '(' ID ')' ';' .  (19)
-
-	.  reduce 19
-
-
-state 106
-	cmd : WRITE '(' LIT ')' ';' .  (16)
-
-	.  reduce 16
-
-
-state 107
-	cmd : WRITE '(' LIT $$4 ',' . exp ')' ';'  (18)
+	exp : exp '?' exp ':' . exp  (61)
 
 	ID  shift 20
 	NUM  shift 21
@@ -1719,7 +1705,35 @@ state 107
 	exp  goto 113
 
 
+state 106
+	cmd : READ '(' ID ')' ';' .  (19)
+
+	.  reduce 19
+
+
+state 107
+	cmd : WRITE '(' LIT ')' ';' .  (16)
+
+	.  reduce 16
+
+
 state 108
+	cmd : WRITE '(' LIT $$4 ',' . exp ')' ';'  (18)
+
+	ID  shift 20
+	NUM  shift 21
+	TRUE  shift 27
+	FALSE  shift 28
+	MAISMAIS  shift 30
+	MENOSMENOS  shift 31
+	'!'  shift 34
+	'('  shift 35
+	.  error
+
+	exp  goto 114
+
+
+state 109
 	cmd : IF '(' exp $$7 ')' . cmd restoIf  (24)
 
 	ID  shift 20
@@ -1741,11 +1755,11 @@ state 108
 	'{'  shift 36
 	.  error
 
-	cmd  goto 114
+	cmd  goto 115
 	exp  goto 39
 
 
-state 109
+state 110
 	cmd : DO $$8 cmd WHILE '(' . exp ')' ';'  (26)
 
 	ID  shift 20
@@ -1758,20 +1772,21 @@ state 109
 	'('  shift 35
 	.  error
 
-	exp  goto 115
+	exp  goto 116
 
 
-state 110
+state 111
 	cmd : WHILE $$5 '(' exp ')' . $$6 cmd  (22)
 	$$6 : .  (21)
 
 	.  reduce 21
 
-	$$6  goto 116
+	$$6  goto 117
 
 
-state 111
-	cmd : FOR '(' exp ';' $$9 . exp ';' $$10 exp ')' $$11 cmd  (30)
+state 112
+	cmd : FOR '(' forVazio ';' $$9 . forVazio ';' $$10 forUpdate ')' $$11 cmd  (30)
+	forVazio : .  (63)
 
 	ID  shift 20
 	NUM  shift 21
@@ -1781,12 +1796,13 @@ state 111
 	MENOSMENOS  shift 31
 	'!'  shift 34
 	'('  shift 35
-	.  error
+	';'  reduce 63
 
-	exp  goto 117
+	exp  goto 80
+	forVazio  goto 118
 
 
-state 112
+state 113
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -1822,7 +1838,7 @@ state 112
 	';'  reduce 61
 
 
-state 113
+state 114
 	cmd : WRITE '(' LIT $$4 ',' exp . ')' ';'  (18)
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
@@ -1853,16 +1869,16 @@ state 113
 	'*'  shift 69
 	'/'  shift 70
 	'%'  shift 71
-	')'  shift 118
+	')'  shift 119
 	.  error
 
 
-114: shift/reduce conflict (shift 119, reduce 35) on ELSE
-state 114
+115: shift/reduce conflict (shift 120, reduce 35) on ELSE
+state 115
 	cmd : IF '(' exp $$7 ')' cmd . restoIf  (24)
 	restoIf : .  (35)
 
-	ELSE  shift 119
+	ELSE  shift 120
 	ID  reduce 35
 	NUM  reduce 35
 	READ  reduce 35
@@ -1882,10 +1898,10 @@ state 114
 	'{'  reduce 35
 	'}'  reduce 35
 
-	restoIf  goto 120
+	restoIf  goto 121
 
 
-state 115
+state 116
 	cmd : DO $$8 cmd WHILE '(' exp . ')' ';'  (26)
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
@@ -1916,11 +1932,11 @@ state 115
 	'*'  shift 69
 	'/'  shift 70
 	'%'  shift 71
-	')'  shift 121
+	')'  shift 122
 	.  error
 
 
-state 116
+state 117
 	cmd : WHILE $$5 '(' exp ')' $$6 . cmd  (22)
 
 	ID  shift 20
@@ -1942,96 +1958,68 @@ state 116
 	'{'  shift 36
 	.  error
 
-	cmd  goto 122
+	cmd  goto 123
 	exp  goto 39
 
 
-state 117
-	cmd : FOR '(' exp ';' $$9 exp . ';' $$10 exp ')' $$11 cmd  (30)
-	exp : exp . '+' exp  (42)
-	exp : exp . '-' exp  (43)
-	exp : exp . '*' exp  (44)
-	exp : exp . '/' exp  (45)
-	exp : exp . '%' exp  (46)
-	exp : exp . '>' exp  (47)
-	exp : exp . '<' exp  (48)
-	exp : exp . EQ exp  (49)
-	exp : exp . LEQ exp  (50)
-	exp : exp . GEQ exp  (51)
-	exp : exp . NEQ exp  (52)
-	exp : exp . OR exp  (53)
-	exp : exp . AND exp  (54)
-	exp : exp . '?' exp ':' exp  (61)
-
-	EQ  shift 58
-	LEQ  shift 59
-	GEQ  shift 60
-	NEQ  shift 61
-	AND  shift 62
-	OR  shift 63
-	'?'  shift 64
-	'>'  shift 65
-	'<'  shift 66
-	'+'  shift 67
-	'-'  shift 68
-	'*'  shift 69
-	'/'  shift 70
-	'%'  shift 71
-	';'  shift 123
-	.  error
-
-
 state 118
-	cmd : WRITE '(' LIT $$4 ',' exp ')' . ';'  (18)
+	cmd : FOR '(' forVazio ';' $$9 forVazio . ';' $$10 forUpdate ')' $$11 cmd  (30)
 
 	';'  shift 124
 	.  error
 
 
 state 119
+	cmd : WRITE '(' LIT $$4 ',' exp ')' . ';'  (18)
+
+	';'  shift 125
+	.  error
+
+
+state 120
 	restoIf : ELSE . $$12 cmd  (34)
 	$$12 : .  (33)
 
 	.  reduce 33
 
-	$$12  goto 125
+	$$12  goto 126
 
 
-state 120
+state 121
 	cmd : IF '(' exp $$7 ')' cmd restoIf .  (24)
 
 	.  reduce 24
 
 
-state 121
+state 122
 	cmd : DO $$8 cmd WHILE '(' exp ')' . ';'  (26)
 
-	';'  shift 126
+	';'  shift 127
 	.  error
 
 
-state 122
+state 123
 	cmd : WHILE $$5 '(' exp ')' $$6 cmd .  (22)
 
 	.  reduce 22
 
 
-state 123
-	cmd : FOR '(' exp ';' $$9 exp ';' . $$10 exp ')' $$11 cmd  (30)
+state 124
+	cmd : FOR '(' forVazio ';' $$9 forVazio ';' . $$10 forUpdate ')' $$11 cmd  (30)
 	$$10 : .  (28)
 
 	.  reduce 28
 
-	$$10  goto 127
+	$$10  goto 128
 
 
-state 124
+state 125
 	cmd : WRITE '(' LIT $$4 ',' exp ')' ';' .  (18)
 
 	.  reduce 18
 
 
-state 125
+state 126
 	restoIf : ELSE $$12 . cmd  (34)
 
 	ID  shift 20
@@ -2053,18 +2041,19 @@ state 125
 	'{'  shift 36
 	.  error
 
-	cmd  goto 128
+	cmd  goto 129
 	exp  goto 39
 
 
-state 126
+state 127
 	cmd : DO $$8 cmd WHILE '(' exp ')' ';' .  (26)
 
 	.  reduce 26
 
 
-state 127
-	cmd : FOR '(' exp ';' $$9 exp ';' $$10 . exp ')' $$11 cmd  (30)
+state 128
+	cmd : FOR '(' forVazio ';' $$9 forVazio ';' $$10 . forUpdate ')' $$11 cmd  (30)
+	forUpdate : .  (65)
 
 	ID  shift 20
 	NUM  shift 21
@@ -2074,19 +2063,19 @@ state 127
 	MENOSMENOS  shift 31
 	'!'  shift 34
 	'('  shift 35
-	.  error
+	')'  reduce 65
 
-	exp  goto 129
+	exp  goto 130
+	forUpdate  goto 131
 
 
-state 128
+state 129
 	restoIf : ELSE $$12 cmd .  (34)
 
 	.  reduce 34
 
 
-state 129
-	cmd : FOR '(' exp ';' $$9 exp ';' $$10 exp . ')' $$11 cmd  (30)
+state 130
 	exp : exp . '+' exp  (42)
 	exp : exp . '-' exp  (43)
 	exp : exp . '*' exp  (44)
@@ -2101,6 +2090,7 @@ state 129
 	exp : exp . OR exp  (53)
 	exp : exp . AND exp  (54)
 	exp : exp . '?' exp ':' exp  (61)
+	forUpdate : exp .  (64)
 
 	EQ  shift 58
 	LEQ  shift 59
@@ -2116,21 +2106,27 @@ state 129
 	'*'  shift 69
 	'/'  shift 70
 	'%'  shift 71
-	')'  shift 130
+	')'  reduce 64
+
+
+state 131
+	cmd : FOR '(' forVazio ';' $$9 forVazio ';' $$10 forUpdate . ')' $$11 cmd  (30)
+
+	')'  shift 132
 	.  error
 
 
-state 130
-	cmd : FOR '(' exp ';' $$9 exp ';' $$10 exp ')' . $$11 cmd  (30)
+state 132
+	cmd : FOR '(' forVazio ';' $$9 forVazio ';' $$10 forUpdate ')' . $$11 cmd  (30)
 	$$11 : .  (29)
 
 	.  reduce 29
 
-	$$11  goto 131
+	$$11  goto 133
 
 
-state 131
-	cmd : FOR '(' exp ';' $$9 exp ';' $$10 exp ')' $$11 . cmd  (30)
+state 133
+	cmd : FOR '(' forVazio ';' $$9 forVazio ';' $$10 forUpdate ')' $$11 . cmd  (30)
 
 	ID  shift 20
 	NUM  shift 21
@@ -2151,18 +2147,18 @@ state 131
 	'{'  shift 36
 	.  error
 
-	cmd  goto 132
+	cmd  goto 134
 	exp  goto 39
 
 
-state 132
-	cmd : FOR '(' exp ';' $$9 exp ';' $$10 exp ')' $$11 cmd .  (30)
+state 134
+	cmd : FOR '(' forVazio ';' $$9 forVazio ';' $$10 forUpdate ')' $$11 cmd .  (30)
 
 	.  reduce 30
 
 
-State 114 contains 1 shift/reduce conflict.
+State 115 contains 1 shift/reduce conflict.
 
 
-47 terminals, 22 nonterminals
-62 grammar rules, 133 states
+47 terminals, 24 nonterminals
+66 grammar rules, 135 states
