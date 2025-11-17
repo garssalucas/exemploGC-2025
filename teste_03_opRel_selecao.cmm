@@ -1,60 +1,49 @@
-struct Pessoa {
-    int idade;
-    int peso;
+struct Aluno {
+    int matricula;
+    int notas[3];   
 };
 
-int notas[10];
+struct Time {
+    int id;
+    int pontos;     
+};
+
 int i;
 int soma;
-Pessoa p;
-int maior;
-int x;
+Aluno a;       
+Time t[2];     
 
 void main() {
-
-    p.idade = 30;
-    p.peso  = 80;
-
-    write("Idade: ", p.idade);
-    write("Peso: ", p.peso);
-
-    for (i = 0; i < 10; i++)
-        notas[i] = i * 2;
-
+    
     i = 0;
+    while (i < 3) {
+        a.notas[i] = i + 1;   
+        i++;
+    }
+
+    
     soma = 0;
-
-    while (i < 10) {
-        soma = soma + notas[i];
+    i = 0;
+    while (i < 3) {
+        soma = soma + a.notas[i];  
         i++;
     }
 
-    write("Soma = ", soma);
-
-    
-    maior = (p.idade > p.peso) ? p.idade : p.peso;
-    write("Maior idade/peso = ", maior);
+    write ("Soma notas de a = ", soma);
 
     i = 0;
-    do {
-        if (i == 5){ i++;
-            continue;}
-
-        write("i = ", i);
-
-        if (i == 8)
-            break;
-
+    while (i < 2) {
+        t[i].id = i;                  
+        t[i].pontos = (i + 1) * 10;   
         i++;
-    } while (i < 10);
-
-    
-    x = 0;
-    for (i = 0; i < 5; i++) {
-        x += i++;
-        write("Parcial de x = ", x);
     }
 
-    write("Final x = ", x);
+    soma = 0;
+    i = 0;
+    while (i < 2) {
+        soma = soma + t[i].pontos;    
+        i++;
+    }
 
+    write ("Soma pontos dos times = ", soma);
 }

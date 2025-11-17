@@ -68,8 +68,12 @@ campo
       {
         camposStructAtual.add(new TS_entry($2, $1));
       }
-    ;
-
+		| type ID '[' NUM ']' ';'
+			{
+				int tam = Integer.parseInt($4);
+				camposStructAtual.add(new TS_entry($2, Parser.ARRAY, tam, $1));
+			}
+		;
 decl : 	type ID '[' NUM ']' ';'
 								{
 									TS_entry nodo = ts.pesquisa($2);
@@ -95,7 +99,27 @@ decl : 	type ID '[' NUM ']' ';'
 									} else {
 										for (TS_entry campo : structModels.get(tipo)) {
 											String nomeReal = var + "_" + campo.getId();
-											ts.insert(new TS_entry(nomeReal, campo.getTipo()));
+											int tipoBase = (campo.getTipo() == Parser.ARRAY) ? campo.getTipoBase() : campo.getTipo();
+											ts.insert(new TS_entry(nomeReal, campo.getTipo(), campo.getNumElem(), tipoBase));
+										}
+									}
+								}
+					| ID ID '[' NUM ']' ';'
+								{
+									String tipo = $1;
+									String var = $2;
+									int tam = Integer.parseInt($4);
+
+									if (!structModels.containsKey(tipo)) {
+										yyerror("tipo struct '"+tipo+"' nao declarado");
+									} else {
+										for (TS_entry campo : structModels.get(tipo)) {
+											String nomeReal = var + "_" + campo.getId();
+											int tamCampo = (campo.getNumElem() <= 0) ? 1 : campo.getNumElem();
+											int tamTotal = tamCampo * tam;
+											int tamTotalCorrigido = tamCampo * tam; 
+											int tipoBase = (campo.getTipo() == Parser.ARRAY) ? campo.getTipoBase() : campo.getTipo();
+											ts.insert(new TS_entry(nomeReal, Parser.ARRAY, tamTotalCorrigido, tipoBase));
 										}
 									}
 								}
@@ -279,6 +303,25 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
   						   System.out.println("\tMOVL %EDX, _"+$1);
 						   System.out.println("\tPUSHL %EDX");
 					     }
+		| ID '.' ID '[' exp ']' '=' exp
+						{
+							String nomeReal = $1 + "_" + $3;
+							System.out.println("\tPOPL %EDX"); 
+							System.out.println("\tPOPL %EAX"); 
+							System.out.println("\tIMULL $4, %EAX");
+							System.out.println("\tMOVL %EDX, _" + nomeReal + "(,%EAX)");
+							System.out.println("\tPUSHL %EDX"); 
+						}
+
+    	| ID '[' exp ']' '.' ID '=' exp
+						{
+							String nomeReal = $1 + "_" + $6;
+							System.out.println("\tPOPL %EDX"); 
+							System.out.println("\tPOPL %EAX"); 
+							System.out.println("\tIMULL $4, %EAX");
+							System.out.println("\tMOVL %EDX, _" + nomeReal + "(,%EAX)");
+							System.out.println("\tPUSHL %EDX");  
+						}
 		| ID '.' ID '=' exp
 							{
 								String nomeReal = $1 + "_" + $3;
@@ -359,7 +402,29 @@ exp :  NUM  { System.out.println("\tPUSHL $"+$1); }
 			System.out.println("\tPUSHL %EAX");        
 			System.out.printf("rot_%02d:\n", r+1);
 		}
+		| ID '.' ID '[' exp ']'
+				{
+					String nomeReal = $1 + "_" + $3;
+					TS_entry t = ts.pesquisa(nomeReal);
+					if (t == null) yyerror("campo " + $3 + " inexistente em " + $1);
+
+					System.out.println("\tPOPL %EAX");       
+					System.out.println("\tIMULL $4, %EAX");  
+					System.out.println("\tPUSHL _" + nomeReal + "(,%EAX)"); 
+				}
+
+    	| ID '[' exp ']' '.' ID
+				{
+					String nomeReal = $1 + "_" + $6; 
+					TS_entry t = ts.pesquisa(nomeReal);
+					if (t == null) yyerror("campo " + $6 + " inexistente na struct " + $1);
+					
+					System.out.println("\tPOPL %EAX");       
+					System.out.println("\tIMULL $4, %EAX"); 
+					System.out.println("\tPUSHL _" + nomeReal + "(,%EAX)"); 
+				}
 		;
+
 forVazio
     : exp { 
             System.out.println("\tPOPL %EDX"); 
